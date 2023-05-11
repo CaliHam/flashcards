@@ -45,7 +45,18 @@ const stopTimer = (round) => {
     const elapsedTime = endTime - round.startTime;
     const elapsedMinutes = Math.floor(elapsedTime / (1000 * 60));
     const elapsedSeconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
-    const result = `Quiz completed in ${elapsedMinutes} minutes and ${elapsedSeconds} seconds.`
+    return showTime(elapsedMinutes, elapsedSeconds)
+}
+
+const showTime = (elapsedMinutes, elapsedSeconds) => {
+    let result;
+    if (elapsedMinutes === 0){
+        result = `You completed the quiz in ${elapsedSeconds} seconds.`
+    } else if (elapsedMinutes === 1){
+        result = `You completed the quiz in ${elapsedMinutes} minute and ${elapsedSeconds} seconds.`
+    } else {
+        result = `You completed the quiz in ${elapsedMinutes} minutes and ${elapsedSeconds} seconds.`
+    }
     return result;
 }
 
