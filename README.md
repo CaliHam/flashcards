@@ -3,7 +3,7 @@
 ## Introduction
 Users are able to play through a quiz testing their knowledge of array prototype methods. At the end of the quiz, the user will receive their score out of 100, as well as how long is took for them to complete it. The goal of this project was to be able to follow spec/prompts to make a working application, write modular reusable code that follows SRP, and implement a robust testing suite using test driven development.
 
-![gif of game](assets/game.gif)
+![gif of game](assets/quiz.gif)
 
 ## Technologies used
 - JavaScript

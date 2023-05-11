@@ -23,34 +23,30 @@ describe('round', function() {
 })
 
 describe('take turn', function() {
-    let card1, card2, card3, deck;
+    let card1, card2, card3, deck, round;
     beforeEach(() => {
         card1 = createCard(1, 'What allows you to define a set of related information using key-value pairs?', ['object', 'array', 'function'], 'object');
         card2 = createCard(2, 'What is a comma-separated list of related values?', ['object', 'array', 'function'], 'array');
         card3 = createCard(3, 'What is an example of a mutator method?', ['sort()', 'map()', 'join()'], 'sort()')
-        deck = createDeck([card1, card2, card3]);   
+        deck = createDeck([card1, card2, card3]); 
+        round = createRound(deck)  
     })
     it('should allow user to take a turn', function() {
-        const round = createRound(deck)
-        const guess = takeTurn('object', round, deck)
+        const guess1 = takeTurn('object', round, deck)
 
-        expect(guess).to.equal('correct!')
+        expect(guess1).to.equal('correct!')
         expect(round.currentCard).to.equal(card2)
         expect(round.turns).to.equal(1)
     })
-
     it('should update incorrect guesses if the guess is wrong', function() {
-        const round = createRound(deck)
-        const guess = takeTurn('array', round, deck)
+        const guess1 = takeTurn('array', round, deck)
 
-        expect(guess).to.equal('incorrect!')
+        expect(guess1).to.equal('incorrect!')
         expect(round.currentCard).to.equal(card2)
         expect(round.turns).to.equal(1)
         expect(round.incorrectGuesses).to.deep.equal([1])
     })
-
     it('should update when many turns are taken', function() {
-        const round = createRound(deck)
         const guess1 = takeTurn('array', round, deck)
 
         expect(guess1).to.equal('incorrect!')
@@ -72,20 +68,16 @@ describe('calculate percentage correct', function() {
         const card1 = createCard(1, 'What allows you to define a set of related information using key-value pairs?', ['object', 'array', 'function'], 'object');
         const card2 = createCard(2, 'What is a comma-separated list of related values?', ['object', 'array', 'function'], 'array');
         const card3 = createCard(3, 'What is an example of a mutator method?', ['sort()', 'map()', 'join()'], 'sort()')
-
         const deck = createDeck([card1, card2, card3]);
         const round = createRound(deck)
         const guess1 = takeTurn('array', round, deck)
+        const guess2 = takeTurn('array', round, deck)
+        const right = calculatePercentCorrect(round, deck)
 
         expect(guess1).to.equal('incorrect!')
         expect(round.incorrectGuesses).to.deep.equal([1])
-
-        const guess2 = takeTurn('array', round, deck)
-
         expect(guess2).to.equal('correct!')
         expect(round.incorrectGuesses).to.deep.equal([1])
-
-        const right = calculatePercentCorrect(round, deck)
         expect(right).to.equal(50)
     })
 })
@@ -96,38 +88,30 @@ describe('end round', function() {
         card1 = createCard(1, 'What allows you to define a set of related information using key-value pairs?', ['object', 'array', 'function'], 'object');
         card2 = createCard(2, 'What is a comma-separated list of related values?', ['object', 'array', 'function'], 'array');
         card3 = createCard(3, 'What is an example of a mutator method?', ['sort()', 'map()', 'join()'], 'sort()')
-    
         deck = createDeck([card1, card2, card3]);
         round = createRound(deck)
     })
     it('should end the round if you run out of cards', function() {
         const guess1 = takeTurn('array', round, deck)
+        const guess2 = takeTurn('array', round, deck)
+        const guess3 = takeTurn('sort()', round, deck)
+        const end = endRound(round)
 
         expect(guess1).to.equal('incorrect!')
         expect(round.incorrectGuesses).to.deep.equal([1])
-
-        const guess2 = takeTurn('array', round, deck)
-
         expect(guess2).to.equal('correct!')
         expect(round.incorrectGuesses).to.deep.equal([1])
-
-        const guess3 = takeTurn('sort()', round, deck)
-
         expect(guess3).to.equal('correct!')
         expect(round.incorrectGuesses).to.deep.equal([1])
-
-        const end = endRound(round)
-
         expect(end).to.equal('** Round over! ** You answered 66% of the questions correctly!')
     })
-    it('should show the time it took to complete the quiz in minutes and seconds', function(done) {
+    it('should show the time it took to complete the quiz in minutes and/or seconds', function(done) {
         let endTime;
 
         setTimeout(() => {
            endTime = stopTimer(round)
-           console.log(endTime)
-           expect(endTime).to.equal(`Quiz completed in 0 minutes and 1 seconds.`)
-           done();
+           expect(endTime).to.equal(`You completed the quiz in 1 seconds.`)
+           done()
         }, 1000)
     })
 })
